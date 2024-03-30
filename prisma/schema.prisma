@@ -1,0 +1,34 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  //name / data type / type modifiers / optional attributes 
+  id          String   @id @default(uuid())
+  phoneNumber String   @unique @map("phone_number")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @default(now()) @map("updated_at")
+  JWT         JWT[]
+  @@map("users")
+}
+
+model JWT {
+  accessToken         String   @unique
+  refreshToken        String   @unique
+  accessTokenExpired  DateTime
+  refreshTokenExpired DateTime
+  user                User     @relation(fields: [userId], references: [id])
+  userId              String
+  @@map("tokens")
+}
