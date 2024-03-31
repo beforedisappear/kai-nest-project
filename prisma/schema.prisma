@@ -17,6 +17,7 @@ model User {
   //name / data type / type modifiers / optional attributes 
   id          String   @id @default(uuid())
   phoneNumber String   @unique @map("phone_number")
+  password    String
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @default(now()) @map("updated_at")
   JWT         JWT[]
@@ -25,10 +26,11 @@ model User {
 }
 
 model JWT {
-  token  String   @unique
-  exp    DateTime
-  user   User     @relation(fields: [userId], references: [id])
-  userId String
+  token     String   @unique
+  exp       DateTime
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  userAgent String   @map("user_agent")
 
   @@map("tokens")
 }

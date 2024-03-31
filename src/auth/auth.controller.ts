@@ -1,25 +1,63 @@
-import { Body, Controller, Post } from '@nestjs/common';
-import {
-  AuthDto,
-  LogoutDto,
-  RefreshTokensDto,
-  SendSmsCodeDto,
-} from '@/auth/dto';
 import { AuthService } from './auth.service';
+
+import { UserAgent } from 'libs/common/src/decorators/user-agent.decorator';
+
+import {
+  Controller,
+  Post,
+  Body,
+  HttpCode,
+  BadRequestException,
+  UnauthorizedException,
+} from '@nestjs/common';
+
+import { LoginDto, LogoutDto, RefreshTokensDto, RegisterDto } from '@/auth/dto';
+
+import type { User } from '@prisma/client';
+import type { Request, Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('sendSmsCode')
-  sendSmsCode(@Body() dto: SendSmsCodeDto) {}
+  @Post('register')
+  async register(@Body() dto: RegisterDto) {
+    const user: User | null = await this.authService.register(dto);
 
-  @Post('auth')
-  auth(@Body() dto: AuthDto) {}
+    if (!user) {
+      throw new BadRequestException(
+        `Ошибка регистрации. Пользователь с номером ${JSON.stringify(dto.phoneNumber)} уже существует`,
+      );
+    }
+  }
+
+  @Post('login')
+  async login(@Body() dto: LoginDto, @UserAgent() agent: string) {
+    const tokens = await this.authService.login(dto, agent);
+
+    if (!tokens) {
+      throw new BadRequestException('Данные неверны');
+    }
+
+    return {
+      accessToken: tokens.accessToken,
+      exp: tokens.refreshToken.exp,
+      refreshToken: tokens.refreshToken.token,
+    };
+  }
 
   @Post('refreshTokens')
-  refreshTokens(@Body() dto: RefreshTokensDto) {}
+  refreshTokens(@Body() dto: RefreshTokensDto, @UserAgent() agent: string) {
+    const newTokens = this.authService.refreshTokens(dto, agent);
+
+    if (!newTokens) throw new UnauthorizedException('Ошибка авторизации');
+
+    return newTokens;
+  }
 
   @Post('logout')
-  logout(@Body() dto: LogoutDto) {}
+  @HttpCode(204)
+  logout(@Body() dto: LogoutDto) {
+    return this.authService.logout(dto);
+  }
 }

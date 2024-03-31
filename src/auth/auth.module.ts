@@ -9,6 +9,6 @@ import { options } from './config';
 @Module({
   controllers: [AuthController],
   providers: [AuthService],
-  imports: [PassportModule, JwtModule.registerAsync(options()), UserModule],
+  imports: [PassportModule, UserModule, JwtModule.registerAsync(options())],
 })
 export class AuthModule {}
