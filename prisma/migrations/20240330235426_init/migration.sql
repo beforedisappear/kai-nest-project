@@ -10,10 +10,8 @@ CREATE TABLE "users" (
 
 -- CreateTable
 CREATE TABLE "tokens" (
-    "accessToken" TEXT NOT NULL,
-    "refreshToken" TEXT NOT NULL,
-    "accessTokenExpired" TIMESTAMP(3) NOT NULL,
-    "refreshTokenExpired" TIMESTAMP(3) NOT NULL,
+    "token" TEXT NOT NULL,
+    "exp" TIMESTAMP(3) NOT NULL,
     "userId" TEXT NOT NULL
 );
 
@@ -21,10 +19,7 @@ CREATE TABLE "tokens" (
 CREATE UNIQUE INDEX "users_phone_number_key" ON "users"("phone_number");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "tokens_accessToken_key" ON "tokens"("accessToken");
-
--- CreateIndex
-CREATE UNIQUE INDEX "tokens_refreshToken_key" ON "tokens"("refreshToken");
+CREATE UNIQUE INDEX "tokens_token_key" ON "tokens"("token");
 
 -- AddForeignKey
 ALTER TABLE "tokens" ADD CONSTRAINT "tokens_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

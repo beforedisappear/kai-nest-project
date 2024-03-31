@@ -20,15 +20,15 @@ model User {
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @default(now()) @map("updated_at")
   JWT         JWT[]
+
   @@map("users")
 }
 
 model JWT {
-  accessToken         String   @unique
-  refreshToken        String   @unique
-  accessTokenExpired  DateTime
-  refreshTokenExpired DateTime
-  user                User     @relation(fields: [userId], references: [id])
-  userId              String
+  token  String   @unique
+  exp    DateTime
+  user   User     @relation(fields: [userId], references: [id])
+  userId String
+
   @@map("tokens")
 }
