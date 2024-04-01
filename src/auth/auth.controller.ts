@@ -9,18 +9,24 @@ import {
   HttpCode,
   BadRequestException,
   UnauthorizedException,
+  UseInterceptors,
+  ClassSerializerInterceptor,
 } from '@nestjs/common';
 
 import { LoginDto, LogoutDto, RefreshTokensDto, RegisterDto } from '@/auth/dto';
 
 import type { User } from '@prisma/client';
 import type { Request, Response } from 'express';
+import { ApiTags } from '@nestjs/swagger';
+import { UserResponse } from '@/user/responses';
 
+@ApiTags('authentication')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('register')
+  @UseInterceptors(ClassSerializerInterceptor)
   async register(@Body() dto: RegisterDto) {
     const user: User | null = await this.authService.register(dto);
 
@@ -29,6 +35,8 @@ export class AuthController {
         `Ошибка регистрации. Пользователь с номером ${JSON.stringify(dto.phoneNumber)} уже существует`,
       );
     }
+
+    return new UserResponse(user);
   }
 
   @Post('login')

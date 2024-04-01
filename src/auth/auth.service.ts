@@ -7,6 +7,7 @@ import { add } from 'date-fns';
 import { compareSync } from 'bcrypt';
 
 import {
+  BadRequestException,
   ConflictException,
   Injectable,
   Logger,
@@ -82,33 +83,25 @@ export class AuthService {
 
   async login(dto: LoginDto, agent: string): Promise<Tokens> {
     const user: User = await this.userService
-      .findOne(dto.phoneNumber)
+      .findOne(dto.phoneNumber, true)
       .catch((err) => {
         this.logger.error(err);
         return null;
       });
 
     if (!user || !compareSync(dto.password, user.password)) {
-      throw new UnauthorizedException('Неверный номер или пароль');
+      throw new BadRequestException('Неверный номер или пароль');
     }
 
     return this.generateTokens(user, agent);
   }
 
   async refreshTokens(dto: RefreshTokensDto, agent: string): Promise<Tokens> {
-    const token = await this.prismaService.jWT.findUnique({
+    const token = await this.prismaService.jWT.delete({
       where: { token: dto.refreshToken },
     });
 
-    if (!token) {
-      throw new UnauthorizedException();
-    }
-
-    await this.prismaService.jWT.delete({
-      where: { token: dto.refreshToken },
-    });
-
-    if (new Date(token.exp) < new Date()) {
+    if (!token || new Date(token.exp) < new Date()) {
       throw new UnauthorizedException('Сессия истекла');
     }
 
@@ -118,11 +111,15 @@ export class AuthService {
   }
 
   async logout(dto: LogoutDto) {
-    const token = await this.prismaService.jWT.delete({
+    const token = await this.prismaService.jWT.findFirst({
       where: { token: dto.refreshToken },
     });
 
-    if (!token) throw new UnauthorizedException();
+    if (!token) throw new BadRequestException('Токен был отозван');
+
+    await this.prismaService.jWT.delete({
+      where: { token: dto.refreshToken },
+    });
 
     return null;
   }
