@@ -1,25 +1,28 @@
 import { PrismaService } from '@/prisma/prisma.service';
-import { Inject, Injectable } from '@nestjs/common';
+import { ForbiddenException, Inject, Injectable } from '@nestjs/common';
 import { genSaltSync, hashSync } from 'bcrypt';
+
+import { CreateUserDto } from './dto/create-user.dto';
 
 import type { User } from '@prisma/client';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 import { ConfigService } from '@nestjs/config';
+import { JwtPayload } from '@/auth/interfaces';
 
 @Injectable()
 export class UserService {
   constructor(
     private readonly prismaService: PrismaService,
-    @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private readonly configService: ConfigService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
-  save(user: Partial<User>) {
-    const hasedPassword = this.hashPassword(user.password);
+  save(user: CreateUserDto) {
+    const hashedPassword = this.hashPassword(user.password);
 
     return this.prismaService.user.create({
-      data: { phoneNumber: user.phoneNumber, password: hasedPassword },
+      data: { phoneNumber: user.phoneNumber, password: hashedPassword },
     });
   }
 
@@ -44,11 +47,11 @@ export class UserService {
     return cachedUser;
   }
 
-  private hashPassword(password: string) {
+  hashPassword(password: string) {
     return hashSync(password, genSaltSync(10));
   }
 
-  // delete(id: string) {
-  //   return this.prismaService.user.delete({ where: { id } });
-  // }
+  delete(id: string) {
+    return this.prismaService.user.delete({ where: { id } });
+  }
 }

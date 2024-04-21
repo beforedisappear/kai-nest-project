@@ -16,7 +16,6 @@ import {
 import { LoginDto, LogoutDto, RefreshTokensDto, RegisterDto } from '@/auth/dto';
 
 import type { User } from '@prisma/client';
-import type { Request, Response } from 'express';
 import { ApiTags } from '@nestjs/swagger';
 import { UserResponse } from '@/user/responses';
 

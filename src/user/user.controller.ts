@@ -2,18 +2,20 @@ import {
   ClassSerializerInterceptor,
   Controller,
   Get,
-  // Post,
-  // Delete,
-  // Body,
+  Post,
+  Body,
+  Delete,
   Param,
   UseGuards,
   UseInterceptors,
-  // ParseUUIDPipe,
+  ParseUUIDPipe,
+  ConflictException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { ApiBearerAuth, ApiExcludeController } from '@nestjs/swagger';
 import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard';
 import { UserResponse } from './responses';
+import { CreateUserDto } from './dto/create-user.dto';
 
 // @ApiExcludeController()
 @Controller('user')
@@ -29,13 +31,17 @@ export class UserController {
     return new UserResponse(user);
   }
 
-  // @Post()
-  // createUser(@Body() dto) {
-  //   return this.userService.save(dto);
-  // }
+  @Post()
+  createUser(@Body() dto: CreateUserDto) {
+    return this.userService.save(dto);
+  }
 
-  // @Delete(':id')
-  // deleteUser(@Param('id', ParseUUIDPipe) id: string) {
-  //   return this.userService.delete(id);
-  // }
+  @Delete(':id')
+  async deleteUser(@Param('id', ParseUUIDPipe) id: string) {
+    const user = await this.userService.findOne(id);
+
+    if (!user) throw new ConflictException();
+
+    return this.userService.delete(id);
+  }
 }
