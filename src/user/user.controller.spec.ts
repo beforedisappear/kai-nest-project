@@ -10,7 +10,6 @@ import { UserResponse } from './responses';
 import { User } from '@prisma/client';
 import {
   ConflictException,
-  ExecutionContext,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
