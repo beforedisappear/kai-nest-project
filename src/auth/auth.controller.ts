@@ -1,6 +1,6 @@
 import { AuthService } from './auth.service';
 
-import { UserAgent } from 'libs/common/src/decorators/user-agent.decorator';
+import { UserAgent } from '../../libs/common/src/decorators/user-agent.decorator';
 
 import {
   Controller,

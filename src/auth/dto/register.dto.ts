@@ -8,7 +8,7 @@ import {
 
 import { ApiProperty } from '@nestjs/swagger';
 
-import { IsPasswordsMatchingConstraint } from 'libs/common/src/decorators';
+import { IsPasswordsMatchingConstraint } from '../../../libs/common/src/decorators';
 
 export class RegisterDto {
   @ApiProperty()

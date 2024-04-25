@@ -28,7 +28,7 @@ export class AuthService {
 
   private readonly logger = new Logger(AuthService.name);
 
-  private async getRefreshToken(userId: string, agent: string): Promise<JWT> {
+  async getRefreshToken(userId: string, agent: string): Promise<JWT> {
     const data = await this.prismaService.jWT.findFirst({
       where: { userId, userAgent: agent },
     });
@@ -50,7 +50,7 @@ export class AuthService {
     });
   }
 
-  private async generateTokens(user: User, agent: string) {
+  async generateTokens(user: User, agent: string) {
     const accessToken = this.jwtService.sign({
       id: user.id,
       phoneNumber: user.phoneNumber,

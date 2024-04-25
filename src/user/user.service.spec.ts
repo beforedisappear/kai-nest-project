@@ -10,7 +10,6 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { Cache } from 'cache-manager';
 
 import type { User } from '@prisma/client';
-import { NotFoundException } from '@nestjs/common';
 
 describe('UserService', () => {
   let service: UserService;
