@@ -10,12 +10,14 @@ import {
   UseInterceptors,
   ParseUUIDPipe,
   ConflictException,
+  NotFoundException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { ApiBearerAuth, ApiExcludeController } from '@nestjs/swagger';
 import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard';
 import { UserResponse } from './responses';
 import { CreateUserDto } from './dto/create-user.dto';
+import { NotFoundError } from 'rxjs';
 
 // @ApiExcludeController()
 @Controller('user')
@@ -28,14 +30,13 @@ export class UserController {
   @Get(':idOrPhoneNumber')
   async findOnerUser(@Param('idOrPhoneNumber') idOrPhoneNumber: string) {
     const user = await this.userService.findOne(idOrPhoneNumber);
-    return new UserResponse(user);
+
+    if (user) return new UserResponse(user);
+    else throw new NotFoundException();
   }
 
-  @Post()
-  createUser(@Body() dto: CreateUserDto) {
-    return this.userService.save(dto);
-  }
-
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @Delete(':id')
   async deleteUser(@Param('id', ParseUUIDPipe) id: string) {
     const user = await this.userService.findOne(id);
