@@ -1,11 +1,15 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+enum Type {
+  BURGER
+  HOTDOG
+  SNACK
+}
 
 generator client {
   provider = "prisma-client-js"
+}
+
+generator erd {
+  provider = "prisma-erd-generator"
 }
 
 datasource db {
@@ -20,16 +24,78 @@ model User {
   password    String
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @default(now()) @map("updated_at")
+  //one user to many tokens
   JWT         JWT[]
+  //one user to one cart
+  Cart        Cart?
+  //one user to many orders
+  orders      Order[]
 
   @@map("users")
+}
+
+model Card {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  imageUrl    String   @map("image_url")
+  type        Type
+  price       Int?
+  weight      Int?
+  kcal        Int?
+  components  String[]
+
+  //many cards to many carts
+  carts Cart[]
+
+  //many cards to many orders
+  orders Order[]
+
+  @@map("cards")
+}
+
+model Cart {
+  id String @id @default(uuid())
+
+  //one cart to one user 
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @unique
+
+  //many carts to many cards
+  cards Card[]
+
+  @@map("carts")
+}
+
+model Order {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+
+  //one order to one user 
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @unique
+
+  //many orders to many cards
+  cards Card[]
+
+  @@map("orders")
+}
+
+model Banner {
+  id              String @id @default(uuid())
+  alt             String
+  targetUrl       String @map("target_url")
+  mobileImageUrl  String @map("mobile_image_url")
+  desktopImageUrl String @map("desktop_image_url")
+
+  @@map("banners")
 }
 
 model JWT {
   token     String   @unique
   exp       DateTime
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String
+  userId    String   @unique
   userAgent String   @map("user_agent")
 
   @@map("tokens")

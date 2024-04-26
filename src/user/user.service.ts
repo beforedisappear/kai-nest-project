@@ -1,20 +1,19 @@
 import { PrismaService } from '@/prisma/prisma.service';
-import { ForbiddenException, Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { genSaltSync, hashSync } from 'bcrypt';
 
 import { CreateUserDto } from './dto/create-user.dto';
 
-import type { User } from '@prisma/client';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
-import { ConfigService } from '@nestjs/config';
-import { JwtPayload } from '@/auth/interfaces';
+
+import type { User } from '@prisma/client';
 
 @Injectable()
 export class UserService {
   constructor(
     private readonly prismaService: PrismaService,
-    private readonly configService: ConfigService,
+    // private readonly configService: ConfigService,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
