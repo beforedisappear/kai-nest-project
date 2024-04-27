@@ -15,7 +15,9 @@ import {
 import { CardService } from './card.service';
 import { CreateCardDto } from './dto/createCard.dto';
 import { CardListDto } from './dto/cardList.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('card')
 @Controller('card')
 export class CardController {
   constructor(private readonly cardService: CardService) {}
@@ -46,7 +48,7 @@ export class CardController {
 
       return res;
     } catch (e) {
-      console.log(e);
+      console.error(e);
       throw new BadRequestException();
     }
   }

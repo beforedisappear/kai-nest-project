@@ -12,11 +12,11 @@ import {
 } from '@nestjs/common';
 
 import { UserService } from './user.service';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiExcludeController } from '@nestjs/swagger';
 import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard';
 import { UserResponse } from './responses';
 
-// @ApiExcludeController()
+@ApiExcludeController()
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}

@@ -6,6 +6,9 @@ import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { CardModule } from './card/card.module';
+import { CartController } from './cart/cart.controller';
+import { CartService } from './cart/cart.service';
+import { CartModule } from './cart/cart.module';
 
 @Module({
   imports: [
@@ -14,8 +17,9 @@ import { CardModule } from './card/card.module';
     AuthModule,
     ConfigModule.forRoot({ isGlobal: true }),
     CardModule,
+    CartModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [AppController, CartController],
+  providers: [AppService, CartService],
 })
 export class AppModule {}

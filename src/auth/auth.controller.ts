@@ -53,7 +53,7 @@ export class AuthController {
     };
   }
 
-  @Post('refreshTokens')
+  @Post('refresh-tokens')
   refreshTokens(@Body() dto: RefreshTokensDto, @UserAgent() agent: string) {
     const newTokens = this.authService.refreshTokens(dto, agent);
 
