@@ -10,6 +10,7 @@ import { CartController } from './cart/cart.controller';
 import { CartService } from './cart/cart.service';
 import { CartModule } from './cart/cart.module';
 import { OrderModule } from './order/order.module';
+import { BannerModule } from './banner/banner.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { OrderModule } from './order/order.module';
     CardModule,
     CartModule,
     OrderModule,
+    BannerModule,
   ],
   controllers: [AppController, CartController],
   providers: [AppService, CartService],
