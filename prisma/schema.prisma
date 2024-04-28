@@ -70,10 +70,12 @@ model Cart {
 model Order {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
+  isActive  Boolean  @default(true) @map("is_active")
 
   //one order to one user 
   user   User   @relation(fields: [userId], references: [id])
-  userId String @unique
+  userId String
 
   //many orders to many cards
   cards Card[]

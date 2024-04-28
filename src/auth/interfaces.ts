@@ -9,3 +9,7 @@ export interface JwtPayload {
   id: string;
   phoneNumber: string;
 }
+
+export interface UserJwtPayload {
+  id: string;
+}

@@ -1,10 +1,3 @@
-import { Request as HttpRequest } from 'express';
-
-interface UserJwtPayload {
-  id: string;
-}
-type AuthRequest = HttpRequest & { user: UserJwtPayload };
-
 import {
   Body,
   Controller,
@@ -20,6 +13,8 @@ import { CartService } from './cart.service';
 
 import { AddCardToCart } from './dto/addCardToCart';
 import { RemoveCardFromCart } from './dto/removeCardFromCart';
+
+import type { AuthRequest } from '@/auth/types';
 
 @ApiTags('cart')
 @Controller('cart')

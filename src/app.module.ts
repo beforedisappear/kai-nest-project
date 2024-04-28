@@ -9,6 +9,7 @@ import { CardModule } from './card/card.module';
 import { CartController } from './cart/cart.controller';
 import { CartService } from './cart/cart.service';
 import { CartModule } from './cart/cart.module';
+import { OrderModule } from './order/order.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { CartModule } from './cart/cart.module';
     ConfigModule.forRoot({ isGlobal: true }),
     CardModule,
     CartModule,
+    OrderModule,
   ],
   controllers: [AppController, CartController],
   providers: [AppService, CartService],
