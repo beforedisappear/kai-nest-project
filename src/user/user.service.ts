@@ -13,7 +13,6 @@ import type { User } from '@prisma/client';
 export class UserService {
   constructor(
     private readonly prismaService: PrismaService,
-    // private readonly configService: ConfigService,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 

@@ -5,7 +5,7 @@ import { LoginDto, LogoutDto, RefreshTokensDto, RegisterDto } from './dto';
 import { JWT, User } from '@prisma/client';
 
 import { v4 as uuidv4 } from 'uuid';
-import { UserResponse } from '@/user/responses';
+import { UserResponse } from '@/user/dto/user-response.dto';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '@/prisma/prisma.service';
 import { UserService } from '@/user/user.service';

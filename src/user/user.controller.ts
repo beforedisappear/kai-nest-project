@@ -14,7 +14,7 @@ import {
 import { UserService } from './user.service';
 import { ApiBearerAuth, ApiExcludeController } from '@nestjs/swagger';
 import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard';
-import { UserResponse } from './responses';
+import { UserResponse } from '@/user/dto/user-response.dto';
 
 @ApiExcludeController()
 @Controller('user')

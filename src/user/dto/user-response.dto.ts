@@ -1,5 +1,5 @@
-import { User } from '@prisma/client';
 import { Exclude } from 'class-transformer';
+import type { User } from '@prisma/client';
 
 export class UserResponse implements User {
   id: string;
