@@ -17,7 +17,7 @@ import { LoginDto, LogoutDto, RefreshTokensDto, RegisterDto } from '@/auth/dto';
 
 import type { User } from '@prisma/client';
 import { ApiTags } from '@nestjs/swagger';
-import { UserResponse } from '@/user/responses';
+import { UserResponse } from '@/user/dto/user-response.dto';
 
 @ApiTags('authentication')
 @Controller('auth')
@@ -53,7 +53,7 @@ export class AuthController {
     };
   }
 
-  @Post('refreshTokens')
+  @Post('refresh-tokens')
   refreshTokens(@Body() dto: RefreshTokensDto, @UserAgent() agent: string) {
     const newTokens = this.authService.refreshTokens(dto, agent);
 

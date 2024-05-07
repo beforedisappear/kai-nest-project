@@ -1,25 +1,22 @@
 import {
-  ClassSerializerInterceptor,
-  Controller,
   Get,
-  Post,
-  Body,
-  Delete,
   Param,
+  Delete,
   UseGuards,
-  UseInterceptors,
+  Controller,
   ParseUUIDPipe,
+  UseInterceptors,
   ConflictException,
   NotFoundException,
+  ClassSerializerInterceptor,
 } from '@nestjs/common';
+
 import { UserService } from './user.service';
 import { ApiBearerAuth, ApiExcludeController } from '@nestjs/swagger';
 import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard';
-import { UserResponse } from './responses';
-import { CreateUserDto } from './dto/create-user.dto';
-import { NotFoundError } from 'rxjs';
+import { UserResponse } from '@/user/dto/user-response.dto';
 
-// @ApiExcludeController()
+@ApiExcludeController()
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}

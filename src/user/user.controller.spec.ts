@@ -6,7 +6,7 @@ import { UserService } from './user.service';
 import { PrismaService } from '@/prisma/prisma.service';
 import { ConfigService } from '@nestjs/config';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import { UserResponse } from './responses';
+import { UserResponse } from '@/user/dto/user-response.dto';
 import { User } from '@prisma/client';
 import {
   ConflictException,
