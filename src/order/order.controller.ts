@@ -4,6 +4,7 @@ import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { OrderService } from './order.service';
 import { CancelOrder } from './dto/cancelOrder.dto';
+import { ValidationPipe } from '@nestjs/common';
 
 @ApiTags('order')
 @Controller('order')
@@ -27,7 +28,10 @@ export class OrderController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @Post('cancel-order')
-  cancelOrder(@Req() req: AuthRequest, @Body() dto: CancelOrder) {
+  cancelOrder(
+    @Req() req: AuthRequest,
+    @Body(new ValidationPipe()) dto: CancelOrder,
+  ) {
     return this.orderService.cancel(req.user.id, dto.orderId);
   }
 }

@@ -1,17 +1,17 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 import { CardType } from '../card.types';
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 
 export class CardListDto {
   @ApiProperty()
-  @IsNumber()
-  page: number;
+  @IsString()
+  page: string;
 
   @ApiProperty({ required: false })
   @IsOptional()
-  @IsNumber()
-  offset?: number;
+  @IsString()
+  offset?: string;
 
   @ApiProperty({
     enum: CardType,

@@ -11,6 +11,7 @@ import {
   UnauthorizedException,
   UseInterceptors,
   ClassSerializerInterceptor,
+  ValidationPipe,
 } from '@nestjs/common';
 
 import { LoginDto, LogoutDto, RefreshTokensDto, RegisterDto } from '@/auth/dto';
@@ -26,7 +27,7 @@ export class AuthController {
 
   @Post('register')
   @UseInterceptors(ClassSerializerInterceptor)
-  async register(@Body() dto: RegisterDto) {
+  async register(@Body(new ValidationPipe()) dto: RegisterDto) {
     const user: User | null = await this.authService.register(dto);
 
     if (!user) {
@@ -39,7 +40,10 @@ export class AuthController {
   }
 
   @Post('login')
-  async login(@Body() dto: LoginDto, @UserAgent() agent: string) {
+  async login(
+    @Body(new ValidationPipe()) dto: LoginDto,
+    @UserAgent() agent: string,
+  ) {
     const tokens = await this.authService.login(dto, agent);
 
     if (!tokens) {
@@ -54,7 +58,10 @@ export class AuthController {
   }
 
   @Post('refresh-tokens')
-  refreshTokens(@Body() dto: RefreshTokensDto, @UserAgent() agent: string) {
+  refreshTokens(
+    @Body(new ValidationPipe()) dto: RefreshTokensDto,
+    @UserAgent() agent: string,
+  ) {
     const newTokens = this.authService.refreshTokens(dto, agent);
 
     if (!newTokens) throw new UnauthorizedException('Ошибка авторизации');
@@ -64,7 +71,7 @@ export class AuthController {
 
   @Post('logout')
   @HttpCode(204)
-  logout(@Body() dto: LogoutDto) {
+  logout(@Body(new ValidationPipe()) dto: LogoutDto) {
     return this.authService.logout(dto);
   }
 }

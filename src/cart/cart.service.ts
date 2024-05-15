@@ -16,7 +16,8 @@ export class CartService {
       include: { cards: true },
     });
 
-    return cardsInCart.cards;
+    if (cardsInCart) return cardsInCart.cards;
+    else return [];
   }
 
   async add(id: string, userId: string) {

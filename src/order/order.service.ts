@@ -27,7 +27,7 @@ export class OrderService {
   async create(userId: string) {
     const cards = await this.cartService.getAll(userId);
 
-    if (cards.length === 0) throw new ConflictException();
+    if (cards.length === 0) throw new ConflictException('empty cart');
 
     const res = await this.prismaService.order.create({
       data: {

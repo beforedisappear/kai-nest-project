@@ -12,12 +12,12 @@ export class CardService {
     return this.prismaService.card.create({ data: card });
   }
 
-  async getAllOrByType({ page, offset = 10, type }: CardListDto) {
-    const skip = (page - 1) * offset;
+  async getAllOrByType({ page, offset = '10', type }: CardListDto) {
+    const skip = (Number(page) - 1) * Number(offset);
 
     const cards = await this.prismaService.card.findMany({
       skip,
-      take: offset,
+      take: Number(offset),
       orderBy: { id: 'asc' }, // или любое другое поле для сортировки
       ...(type && { where: { type } }),
     });

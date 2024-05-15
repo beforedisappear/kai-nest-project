@@ -11,6 +11,7 @@ import {
   BadRequestException,
   HttpCode,
   Query,
+  ValidationPipe,
 } from '@nestjs/common';
 import { CardService } from './card.service';
 import { CreateCardDto } from './dto/createCard.dto';
@@ -23,7 +24,7 @@ export class CardController {
   constructor(private readonly cardService: CardService) {}
 
   @Get('list')
-  async getCardList(@Query() allQueryParams: CardListDto) {
+  async getCardList(@Query(new ValidationPipe()) allQueryParams: CardListDto) {
     const cardList = await this.cardService.getAllOrByType(allQueryParams);
 
     return { cardList, count: cardList.length };
@@ -42,7 +43,7 @@ export class CardController {
   @Post('add-card')
   @UseInterceptors(ClassSerializerInterceptor)
   @HttpCode(200)
-  async addCard(@Body() dto: CreateCardDto) {
+  async addCard(@Body(new ValidationPipe()) dto: CreateCardDto) {
     try {
       const res = await this.cardService.create(dto);
 
